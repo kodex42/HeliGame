@@ -7,6 +7,7 @@ class PlayerGameObject : public GameObject {
 public:
 	PlayerGameObject(glm::vec3 &entityPos, GLuint entityTexture, GLint entityNumElements);
 
-	// Update function for moving the player object around
+	// Overrides
 	virtual void update(double deltaTime) override;
+	virtual void render(Shader & shader) override;
 };

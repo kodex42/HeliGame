@@ -18,3 +18,13 @@ void PlayerGameObject::update(double deltaTime) {
 	// Call the parent's update method to move the object in standard way, if desired
 	GameObject::update(deltaTime);
 }
+
+void PlayerGameObject::render(Shader &shader) {
+	// Bind the entities texture
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	transform(shader);
+
+	// Draw the entity
+	glDrawElements(GL_TRIANGLES, numElements, GL_UNSIGNED_INT, 0);
+}
