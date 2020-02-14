@@ -21,11 +21,12 @@ public:
 
 	// Renders the GameObject using a shader
 	virtual void render(Shader &shader);
-	virtual void GameObject::transform(Shader &shader);
+	virtual void transform(Shader &shader);
 
 	// Getters
 	inline glm::vec3& getPosition() { return position; }
 	inline glm::vec3& getVelocity() { return velocity; }
+	inline glm::vec3& getAcceleration() { return acceleration; }
 	inline float getSize() { return objectSize; }
 	inline double getAngle() { return angle; };
 	inline double getAimAngle() { return aimAngle; };
@@ -33,6 +34,7 @@ public:
 	// Setters
 	inline void setPosition(glm::vec3& newPosition) { position = newPosition; }
 	inline void setVelocity(glm::vec3& newVelocity) { velocity = newVelocity; }
+	inline void setAcceleration(glm::vec3& newAcceleration) { acceleration = newAcceleration; }
 	virtual inline void kill() { isAlive = false; }
 	virtual inline void revive() { isAlive = true; }
 protected:
@@ -40,6 +42,7 @@ protected:
 	// TODO: Add more transformation variables
 	glm::vec3 position;
 	glm::vec3 velocity;
+	glm::vec3 acceleration;
 
 	// For visual flair
 	glm::vec2 offset;

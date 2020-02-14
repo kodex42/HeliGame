@@ -15,6 +15,7 @@ GameObject::GameObject(glm::vec3 &entityPosition, GLuint entityTexture, GLint en
 	texture = entityTexture;
 	numElements = entityNumElements;
 	velocity = glm::vec3(0.0f, 0.0f, 0.0f); // starts out stationary
+	acceleration = glm::vec3(0.0f, 0.0f, 0.0f); // starts without acceleration
 	offset = glm::vec2(0, 0);
 	angle = 90;
 	aimAngle = 0;

@@ -9,5 +9,9 @@ public:
 
 	// Overrides
 	virtual void update(double deltaTime) override;
+	virtual void transform(Shader& shader) override;
 	virtual void render(Shader & shader) override;
+	
+	// Member functions
+	void changeAcceleration(glm::vec3 newAcceleration);
 };
