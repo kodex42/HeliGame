@@ -133,24 +133,37 @@ void setup(void)
 
 void controls(void)
 {
-	GameObject *player = gameObjects[0];
-	glm::vec3 curpos = player->getPosition();
-	// Checking for player input and making changes accordingly
+	PlayerGameObject *player = (PlayerGameObject*) gameObjects[0];
+	glm::vec3 currAcc = player->getAcceleration();
+	float ddx = currAcc.x;
+	float ddy = currAcc.y;
+
+	// Controls allow the player to move in 8 directions, but while not moving the player hovers slightly downwards
 	if (glfwGetKey(Window::getWindow(), GLFW_KEY_W) == GLFW_PRESS) {
-		player->setPosition(curpos + glm::vec3(0, 0.001, 0));
+		ddy = 1.0f;
 	}
-	if (glfwGetKey(Window::getWindow(), GLFW_KEY_S) == GLFW_PRESS) {
-		player->setPosition(curpos + glm::vec3(0, -0.001, 0));
+	else if (glfwGetKey(Window::getWindow(), GLFW_KEY_S) == GLFW_PRESS) {
+		ddy = -1.0f;
+	}
+	else {
+		ddy = -0.02f;
+	}
 
-	}
 	if (glfwGetKey(Window::getWindow(), GLFW_KEY_D) == GLFW_PRESS) {
-		player->setPosition(curpos + glm::vec3(0.001, 0, 0));
-
+		ddx = 1.0f;
+		if (ddy == -0.02f)
+			ddy = 0.0f;
 	}
-	if (glfwGetKey(Window::getWindow(), GLFW_KEY_A) == GLFW_PRESS) {
-		player->setPosition(curpos + glm::vec3(-0.001, 0, 0));
-
+	else if (glfwGetKey(Window::getWindow(), GLFW_KEY_A) == GLFW_PRESS) {
+		ddx = -1.0f;
+		if (ddy == -0.02f)
+			ddy = 0.0f;
 	}
+	else {
+		ddx = 0.0f;
+	}
+
+	player->changeAcceleration(glm::vec3(ddx, ddy, 0));
 }
 
 void gameLoop(Window &window, Shader &shader, double deltaTime)
