@@ -23,7 +23,7 @@
 const std::string window_title_g = "Transform Demo";
 const unsigned int window_width_g = 800;
 const unsigned int window_height_g = 600;
-const glm::vec3 viewport_background_color_g(0.0, 0.0, 1.0);
+const glm::vec3 viewport_background_color_g(0.0, 0.0, 0.0);
 
 // Global texture info
 GLuint tex[3];

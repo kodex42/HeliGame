@@ -13,10 +13,13 @@ PlayerGameObject::PlayerGameObject(glm::vec3 &entityPos, GLuint entityTexture, G
 // Update function for moving the player object around
 void PlayerGameObject::update(double deltaTime) {
 
-	// special player updates go here
+	// Update velocity based on current angle
+	double rad = glm::radians(angle);
+	velocity.x = speed * cos(rad);
+	velocity.y = speed * sin(rad);
 
-	// Call the parent's update method to move the object in standard way, if desired
-	GameObject::update(deltaTime);
+	// Update object position with Euler integration
+	position += velocity * (float)deltaTime;
 }
 
 void PlayerGameObject::render(Shader &shader) {

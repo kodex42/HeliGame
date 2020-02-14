@@ -20,6 +20,7 @@ GameObject::GameObject(glm::vec3 &entityPosition, GLuint entityTexture, GLint en
 	aimAngle = 0;
 	speed = 0;
 	isAlive = true;
+	objectSize = 1.0f;
 }
 
 void GameObject::changeDirection(double diff) {
@@ -35,7 +36,7 @@ void GameObject::changeSpeed(double diff) {
 // Updates the GameObject's state
 void GameObject::update(double deltaTime) {
 
-	// Update velocity based on starting angle
+	// Update velocity based on current angle
 	double rad = glm::radians(angle);
 	velocity.x = speed * cos(rad);
 	velocity.y = speed * sin(rad);
