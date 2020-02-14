@@ -353,3 +353,5 @@ healthchecksdb
 MigrationBackup/
 
 # End of https://www.gitignore.io/api/visualstudio
+Getting Started/Demo/TextureDemo/.vs/TextureDemo/v15/.suo
+Getting Started/Demo/TextureDemo/.vs/TextureDemo/v15/Browse.VC.db
