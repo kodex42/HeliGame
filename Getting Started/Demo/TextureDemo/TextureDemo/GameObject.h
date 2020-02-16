@@ -27,14 +27,19 @@ public:
 	inline glm::vec3& getPosition() { return position; }
 	inline glm::vec3& getVelocity() { return velocity; }
 	inline glm::vec3& getAcceleration() { return acceleration; }
+	inline float getHealth() { return health; }
+	inline float getMaxHealth() { return maxHealth; }
 	inline float getSize() { return objectSize; }
-	inline double getAngle() { return angle; };
-	inline double getAimAngle() { return aimAngle; };
+	inline double getAngle() { return angle; }
+	inline double getAimAngle() { return aimAngle; }
+	inline bool getIsAlive() { return isAlive; }
+	inline bool getIsFriendly() { return isFriendly; }
 
 	// Setters
-	inline void setPosition(glm::vec3& newPosition) { position = newPosition; }
-	inline void setVelocity(glm::vec3& newVelocity) { velocity = newVelocity; }
-	inline void setAcceleration(glm::vec3& newAcceleration) { acceleration = newAcceleration; }
+	inline void setPosition(glm::vec3 &newPosition) { position = newPosition; }
+	inline void setVelocity(glm::vec3 &newVelocity) { velocity = newVelocity; }
+	inline void setAcceleration(glm::vec3 &newAcceleration) { acceleration = newAcceleration; }
+	virtual inline void damage() { health -= 1; }
 	virtual inline void kill() { isAlive = false; }
 	virtual inline void revive() { isAlive = true; }
 protected:
@@ -49,11 +54,14 @@ protected:
 
 	// Object's details
 	GLint numElements;
+	float maxHealth;
+	float health;
 	float objectSize;
 	double angle;
 	double aimAngle;
 	double speed;
 	bool isAlive;
+	bool isFriendly;
 
 	// Object's texture
 	GLuint texture;

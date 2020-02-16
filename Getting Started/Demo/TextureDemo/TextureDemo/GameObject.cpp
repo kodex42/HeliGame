@@ -21,6 +21,7 @@ GameObject::GameObject(glm::vec3 &entityPosition, GLuint entityTexture, GLint en
 	aimAngle = 0;
 	speed = 0;
 	isAlive = true;
+	isFriendly = false;
 	objectSize = 1.0f;
 }
 

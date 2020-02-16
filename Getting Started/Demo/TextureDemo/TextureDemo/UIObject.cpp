@@ -1,7 +1,5 @@
 #include "UIObject.h"
 
-#include "Window.h"
-
 UIObject::UIObject(glm::vec3 &entityPos, GLuint entityTexture, GLint entityNumElements)
 	: GameObject(entityPos, entityTexture, entityNumElements) {
 	objectSize = 0.5f;

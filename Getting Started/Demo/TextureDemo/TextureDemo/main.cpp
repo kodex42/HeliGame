@@ -14,6 +14,12 @@
 #include "Shader.h"
 #include "Window.h"
 #include "PlayerGameObject.h"
+#include "UIObject.h"
+#include "HealthUI.h"
+
+#define NUM_GAME_OBJECTS 3
+#define NUM_UI_TEXTURES 2
+#define NUM_OBJECTS NUM_GAME_OBJECTS + NUM_UI_TEXTURES
 
 // Macro for printing exceptions
 #define PrintException(exception_object)\
@@ -26,11 +32,11 @@ const unsigned int window_height_g = 600;
 const glm::vec3 viewport_background_color_g(0.0, 0.0, 0.0);
 
 // Global texture info
-GLuint tex[3];
+GLuint tex[NUM_OBJECTS];
 
 // Global game object info
 std::vector<GameObject*> gameObjects;
-
+std::vector<UIObject*> uiObjects;
 
 // Create the geometry for a square (with two triangles)
 // Return the number of array elements that form the square
@@ -94,10 +100,12 @@ void setthisTexture(GLuint w, char *fname)
 void setallTexture(void)
 {
 //	tex = new GLuint[4];
-	glGenTextures(3, tex);
+	glGenTextures(NUM_OBJECTS, tex);
 	setthisTexture(tex[0], "orb.png");
 	setthisTexture(tex[1], "saw.png");
 	setthisTexture(tex[2], "rock.png");
+	setthisTexture(tex[3], "healthBarSegment.png");
+	setthisTexture(tex[4], "healthBarMissingSegment.png");
 
 	glBindTexture(GL_TEXTURE_2D, tex[0]);
 }
@@ -113,9 +121,7 @@ void setup(void)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-
 	int size = 6;
-
 
 	// Set up the textures
 	setallTexture();
@@ -128,7 +134,8 @@ void setup(void)
 	gameObjects.push_back(new GameObject(glm::vec3(-1.0f, 1.0f, 0.0f), tex[1], size));
 	gameObjects.push_back(new GameObject(glm::vec3(1.0f, -0.5f, 0.0f), tex[2], size));
 
-
+	// Setup UI objects
+	uiObjects.push_back(new HealthUI(gameObjects[0]->getPosition(), tex[3], tex[4], size, *(gameObjects[0])));
 }
 
 void controls(void)
@@ -171,9 +178,19 @@ void gameLoop(Window &window, Shader &shader, double deltaTime)
 	// Clear background
 	window.clear(viewport_background_color_g);
 
+	// Render UI
+	glm::mat4 UIMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(0.25, 0.25, 0.25));
+	shader.setUniformMat4("viewMatrix", UIMatrix);
+	for (int i = 0; i < uiObjects.size(); i++) {
+		UIObject *obj = uiObjects[i];
+		if (obj->getIsAlive())
+			obj->render(shader);
+	}
+
 	// set view to zoom out, centred by default at 0,0
 	float cameraZoom = 0.25f;
 	glm::mat4 viewMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(cameraZoom, cameraZoom, cameraZoom));
+	viewMatrix = glm::translate(viewMatrix, -(gameObjects[0]->getPosition()));
 	shader.setUniformMat4("viewMatrix", viewMatrix);
 
 	// apply user input
@@ -193,8 +210,11 @@ void gameLoop(Window &window, Shader &shader, double deltaTime)
 			GameObject* otherGameObject = gameObjects[j];
 
 			float distance = glm::length(currentGameObject->getPosition() - otherGameObject->getPosition());
-			if (distance < 0.1f) {
-				// This is where you would perform collision response between objects
+			if (distance < 0.75f) {
+				if (currentGameObject->getIsFriendly() != otherGameObject->getIsFriendly()) {
+					currentGameObject->damage();
+					otherGameObject->damage();
+				}
 			}
 		}
 
@@ -207,6 +227,10 @@ void gameLoop(Window &window, Shader &shader, double deltaTime)
 
 	// Push buffer drawn in the background onto the display
 	glfwSwapBuffers(window.getWindow());
+
+	// Is the player dead?
+	if (!gameObjects[0]->getIsAlive())
+		exit(0);
 }
 
 // Main function that builds and runs the game

@@ -7,14 +7,22 @@
 #define MAX_VEL_Y 3
 #define MIN_VEL_Y -3
 #define FRICTION 0.1f
+#define DAMAGE_I_TIME 3
 
 /*
 	PlayerGameObject inherits from GameObject
 	It overrides GameObject's update method, so that you can check for input to change the velocity of the player
+
 */
 
+double PlayerGameObject::lastDamageTime = -DAMAGE_I_TIME;
+
 PlayerGameObject::PlayerGameObject(glm::vec3 &entityPos, GLuint entityTexture, GLint entityNumElements)
-	: GameObject(entityPos, entityTexture, entityNumElements) {}
+	: GameObject(entityPos, entityTexture, entityNumElements) {
+	maxHealth = 5;
+	health = maxHealth;
+	isFriendly = true;
+}
 
 void PlayerGameObject::changeAcceleration(glm::vec3 newAcceleration)
 {
@@ -55,9 +63,11 @@ void PlayerGameObject::transform(Shader &shader) {
 	glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), position);
 	glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), (float)(angle - 90), glm::vec3(0, 0, 1));
 	glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(objectSize, objectSize, 1));
-
-	// Set the transformation matrix in the shader
+	glm::mat4 damageOffset = glm::translate(glm::mat4(1.0f), glm::vec3(cos(glfwGetTime() * 50) / 50, 0, 0));
 	glm::mat4 transformationMatrix = translationMatrix * rotationMatrix * scaleMatrix;
+	if (lastDamageTime + DAMAGE_I_TIME > glfwGetTime()) {
+		transformationMatrix = damageOffset * transformationMatrix;
+	}
 	shader.setUniformMat4("transformationMatrix", transformationMatrix);
 }
 
@@ -69,4 +79,12 @@ void PlayerGameObject::render(Shader &shader) {
 
 	// Draw the entity
 	glDrawElements(GL_TRIANGLES, numElements, GL_UNSIGNED_INT, 0);
+}
+
+void PlayerGameObject::damage() {
+	if (lastDamageTime + DAMAGE_I_TIME < glfwGetTime()) {
+		lastDamageTime = glfwGetTime();
+		health -= 1;
+		if (health <= 0) kill();
+	}
 }
