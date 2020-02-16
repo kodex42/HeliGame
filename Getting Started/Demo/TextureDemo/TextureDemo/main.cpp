@@ -126,9 +126,19 @@ void setup(void)
 	// Set up the textures
 	setallTexture();
 
+	std::vector<GLuint*> extraTextures;
+	GLuint* machineGunTex = new GLuint();
+	glGenTextures(1, machineGunTex);
+	setthisTexture(*machineGunTex, "machineGun.png");
+	GLuint* rocketLauncherTex = new GLuint();
+	glGenTextures(1, rocketLauncherTex);
+	setthisTexture(*rocketLauncherTex, "rockets.png");
+	extraTextures.push_back(machineGunTex);
+	extraTextures.push_back(rocketLauncherTex);
 	// Setup the player object (position, texture, vertex count)
+	PlayerGameObject* player = new PlayerGameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex[0], size, extraTextures);
 	// Note, player object should always be the first object in the game object vector 
-	gameObjects.push_back(new PlayerGameObject(glm::vec3(0.0f, 0.0f, 0.0f), tex[0], size));
+	gameObjects.push_back(player);
 
 	// Setup other objects
 	gameObjects.push_back(new GameObject(glm::vec3(-1.0f, 1.0f, 0.0f), tex[1], size));
@@ -145,7 +155,7 @@ void controls(void)
 	float ddx = currAcc.x;
 	float ddy = currAcc.y;
 
-	// Controls allow the player to move in 8 directions, but while not moving the player hovers slightly downwards
+	// MOVEMENT: Controls allow the player to move in 8 directions, but while not moving the player hovers slightly downwards
 	if (glfwGetKey(Window::getWindow(), GLFW_KEY_W) == GLFW_PRESS) {
 		ddy = 1.0f;
 	}
@@ -169,8 +179,35 @@ void controls(void)
 	else {
 		ddx = 0.0f;
 	}
-
 	player->changeAcceleration(glm::vec3(ddx, ddy, 0));
+
+	// CHANGING WEAPONS: Can only shoot in 4 cardinal directions
+	if (glfwGetKey(Window::getWindow(), GLFW_KEY_1) == GLFW_PRESS) {
+		player->equip(0);
+	}
+	if (glfwGetKey(Window::getWindow(), GLFW_KEY_2) == GLFW_PRESS) {
+		player->equip(1);
+	}
+	if (glfwGetKey(Window::getWindow(), GLFW_KEY_3) == GLFW_PRESS) {
+		player->equip(2);
+	}
+	if (glfwGetKey(Window::getWindow(), GLFW_KEY_4) == GLFW_PRESS) {
+		player->equip(3);
+	}
+
+	// SHOOTING: Can only shoot in 4 cardinal directions
+	if (glfwGetKey(Window::getWindow(), GLFW_KEY_RIGHT) == GLFW_PRESS) {
+		
+	}
+	if (glfwGetKey(Window::getWindow(), GLFW_KEY_UP) == GLFW_PRESS) {
+		
+	}
+	if (glfwGetKey(Window::getWindow(), GLFW_KEY_LEFT) == GLFW_PRESS) {
+		
+	}
+	if (glfwGetKey(Window::getWindow(), GLFW_KEY_DOWN) == GLFW_PRESS) {
+		
+	}
 }
 
 void gameLoop(Window &window, Shader &shader, double deltaTime)
