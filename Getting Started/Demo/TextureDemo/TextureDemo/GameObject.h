@@ -5,8 +5,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/glm.hpp>
 #include <iostream>
+#include <vector>
 
 #include "Shader.h"
+#include "utils.h"
 
 class GameObject {
 public:

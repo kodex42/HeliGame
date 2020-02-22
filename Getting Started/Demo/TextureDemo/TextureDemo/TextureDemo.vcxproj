@@ -162,11 +162,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HealthUI.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="PlayerGameObject.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="FileUtils.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="UIObject.h" />
+    <ClInclude Include="utils.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
